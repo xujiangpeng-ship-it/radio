@@ -1,4 +1,4 @@
-import type { Env, ApiResult, Station } from '../types';
+import type { Env, ApiResult } from '../types';
 
 export async function handleRequest(request: Request): Promise<Response> {
   const url = new URL(request.url);
