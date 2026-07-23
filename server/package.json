@@ -1,0 +1,17 @@
+{
+  "name": "global-broadcast-backend",
+  "version": "1.0.0",
+  "description": "Global Radio Broadcast App Backend - Cloudflare Workers + D1",
+  "type": "module",
+  "scripts": {
+    "dev": "wrangler dev",
+    "deploy": "wrangler deploy",
+    "db:create": "wrangler d1 create radio-stations",
+    "db:migrate": "wrangler d1 execute radio-stations --file=./schema.sql"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "wrangler": "^4.0.0",
+    "@cloudflare/workers-types": "^4.20250723.0"
+  }
+}

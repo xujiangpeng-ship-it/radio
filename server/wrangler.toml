@@ -1,0 +1,21 @@
+name = "global-broadcast-api"
+main = "src/index.ts"
+compatibility_date = "2025-07-01"
+
+# Database Configuration
+[[d1_databases]]
+binding = "DB"
+database_name = "radio-stations"
+database_id = "YOUR_D1_DATABASE_ID"
+
+# Environment Variables
+[vars]
+RADIO_GARDEN_API_KEY = ""
+CDN_BASE_URL = "https://cdn.yourdomain.com"
+
+[triggers]
+crons = ["0 */6 * * *"]
+
+[env.production]
+[env.production.vars]
+NODE_ENV = "production"
