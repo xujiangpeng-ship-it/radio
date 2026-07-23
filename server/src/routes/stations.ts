@@ -1,19 +1,30 @@
 import { getStations, getStationById } from '../db/stations';
 import type { Env, ApiResult } from '../types';
 
+const corsHeaders: Record<string, string> = {
+  'Access-Control-Allow-Origin': '*',
+  'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
+  'Access-Control-Allow-Headers': 'Content-Type, Authorization',
+};
+
 export async function GET(request: Request, env: Env): Promise<Response> {
   const url = new URL(request.url);
   const path = url.pathname;
 
+  // CORS preflight
+  if (request.method === 'OPTIONS') {
+    return new Response(null, { headers: corsHeaders });
+  }
+
   // Health check
   if (path === '/health') {
-    return Response.json({ status: 'ok', timestamp: new Date().toISOString() });
+    return jsonResponse({ status: 'ok', timestamp: new Date().toISOString() });
   }
 
   // Get stations list
   if (path === '/api/stations') {
     const params = Object.fromEntries(url.searchParams);
-    const result = await getStations(env, params);
+    const result = await getStations(env, params as any);
     return jsonResponse(result as any);
   }
 
@@ -24,34 +35,12 @@ export async function GET(request: Request, env: Env): Promise<Response> {
     return jsonResponse(result as any);
   }
 
-  // Media proxy
-  if (path === '/proxy/stream') {
-    const streamUrl = url.searchParams.get('url');
-    if (!streamUrl) {
-      return jsonResponse({ success: false, message: 'Missing stream URL' }, 400);
-    }
-    
-    try {
-      const response = await fetch(streamUrl);
-      if (!response.ok) {
-        return jsonResponse({ success: false, message: 'Stream unavailable' }, 404);
-      }
-      
-      return new Response(response.body, {
-        headers: {
-          'Content-Type': response.headers.get('Content-Type') || 'audio/mpeg',
-          'Access-Control-Allow-Origin': '*',
-          'Cache-Control': 'public, max-age=3600'
-        }
-      });
-    } catch (error) {
-      return jsonResponse({ success: false, message: 'Proxy error' }, 502);
-    }
-  }
-
   return jsonResponse({ success: false, message: 'Not found' }, 404);
 }
 
 function jsonResponse(data: any, status: number = 200): Response {
-  return Response.json(data, { status });
+  return new Response(JSON.stringify(data), {
+    status,
+    headers: { 'Content-Type': 'application/json', ...corsHeaders }
+  });
 }
