@@ -9,9 +9,8 @@
     "db:create": "wrangler d1 create radio-stations",
     "db:migrate": "wrangler d1 execute radio-stations --file=./schema.sql"
   },
-  "dependencies": {},
   "devDependencies": {
-    "wrangler": "^3.99.0",
-    "@cloudflare/workers-types": "^5.20260723.1"
+    "@cloudflare/workers-types": "^5.20260723.1",
+    "wrangler": "^4.113.0"
   }
 }

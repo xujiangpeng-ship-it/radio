@@ -1,5 +1,4 @@
-import type { Env } from '../types';
-import type { Station, ApiResult } from '../types';
+import type { Env, ApiResult, Station } from '../types';
 
 export async function getStations(
   env: Env,
@@ -7,7 +6,7 @@ export async function getStations(
 ): Promise<ApiResult> {
   try {
     let query = `SELECT * FROM stations WHERE 1=1`;
-    const placeholders: string[] = [];
+    const placeholders: (string | number)[] = [];
 
     if (params.country) {
       query += ` AND country = ?`;
@@ -31,6 +30,7 @@ export async function getStations(
 
     const result = await env.DB.prepare(query).bind(...placeholders).all<Station>();
 
+    // If user_id provided, mark favorites
     if (params.user_id && result.results) {
       const favResult = await env.DB.prepare(
         `SELECT station_id FROM user_favorites WHERE user_id = ?`

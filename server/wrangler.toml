@@ -2,6 +2,11 @@ name = "global-broadcast-api"
 main = "src/index.ts"
 compatibility_date = "2025-07-01"
 
+[[d1_databases]]
+binding = "DB"
+database_name = "radio-stations"
+database_id = "dd3a7602-6320-4dbe-ab00-1924ac07143b"
+
 [vars]
 RADIO_GARDEN_API_KEY = ""
 CDN_BASE_URL = "https://cdn.yourdomain.com"
