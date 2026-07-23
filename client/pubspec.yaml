@@ -9,10 +9,11 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  flutter_localizations:
+    sdk: flutter
 
   # State Management
   flutter_riverpod: ^2.6.1
-  riverpod_annotation: ^2.6.1
 
   # Audio Playback
   just_audio: ^0.9.40
@@ -21,51 +22,18 @@ dependencies:
 
   # Network & API
   dio: ^5.7.0
-  connectivity_plus: ^6.1.0
-
-  # Localization
-  flutter_localizations:
-    sdk: flutter
-  intl: ^0.19.0
 
   # UI Components
   cached_network_image: ^3.4.1
-  shimmer: ^3.0.0
   google_fonts: ^6.2.1
 
   # Storage
   shared_preferences: ^2.3.3
-  sqflite: ^2.4.1
-
-  # Background Tasks
-  workmanager: ^0.5.2
-
-  # Share
-  share_plus: ^10.1.2
-
-  # Analytics (optional)
-  firebase_core: ^3.8.0
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_lints: ^5.0.0
-  build_runner: ^2.4.13
-  riverpod_generator: ^2.6.3
-  custom_lint: ^0.7.0
-  riverpod_lint: ^2.6.3
 
 flutter:
   uses-material-design: true
-
-  assets:
-    - assets/images/
-    - assets/icons/
-    - assets/audio/
-
-  fonts:
-    - family: GlobalBroadcast
-      fonts:
-        - asset: assets/fonts/GlobalBroadcast-Regular.ttf
-        - asset: assets/fonts/GlobalBroadcast-Bold.ttf
-          weight: 700
