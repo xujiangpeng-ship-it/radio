@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../models/station.dart';
 
 class PlayerPage extends StatelessWidget {
   final VoidCallback onPlayPause;
