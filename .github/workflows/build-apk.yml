@@ -36,27 +36,22 @@ jobs:
     
     - name: Build debug APK
       working-directory: client
-      run: flutter build apk --debug --verbose 2>&1 | tee build.log || true
-    
-    - name: Show errors
-      if: failure()
-      run: tail -n 100 build.log
-    
-    - name: Check output
-      if: always()
       run: |
-        ls -la client/build/app/outputs/flutter-apk/ || echo "APK not found"
+        flutter build apk --debug
+        echo "APK PATH: $(ls client/build/app/outputs/flutter-apk/)"
+        ls -la client/build/app/outputs/flutter-apk/*.apk || echo "No APK found"
     
     - name: Upload debug APK
-      if: success()
+      if: always()
       uses: actions/upload-artifact@v4
       with:
         name: app-debug
-        path: client/build/app/outputs/flutter-apk/app-debug.apk
+        path: |
+          client/build/app/outputs/flutter-apk/app-debug.apk
         retention-days: 30
     
-    - name: Upload to GitHub Release
-      if: success() && github.event_name == 'push' && github.ref == 'refs/heads/main'
+    - name: Create GitHub Release
+      if: always() && github.event_name == 'push' && github.ref == 'refs/heads/main'
       uses: softprops/action-gh-release@v2
       with:
         files: client/build/app/outputs/flutter-apk/app-debug.apk
