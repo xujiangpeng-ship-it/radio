@@ -11,9 +11,6 @@ permissions:
 jobs:
   build:
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: client
     
     steps:
     - uses: actions/checkout@v4
@@ -29,22 +26,29 @@ jobs:
       with:
         channel: 'stable'
     
-    - name: Remove existing Android files if any
-      run: rm -rf android ios linux macos windows web
-    
-    - name: Initialize Flutter Project
-      run: flutter create --project-name global_broadcast_app --platforms android .
-    
     - name: Get dependencies
+      working-directory: client
       run: flutter pub get
     
     - name: Configure Android SDK
+      working-directory: client
       run: echo "sdk.dir=$ANDROID_HOME" > local.properties
     
     - name: Build debug APK
-      run: flutter build apk --debug
+      working-directory: client
+      run: flutter build apk --debug --verbose 2>&1 | tee build.log || true
+    
+    - name: Show errors
+      if: failure()
+      run: tail -n 100 build.log
+    
+    - name: Check output
+      if: always()
+      run: |
+        ls -la client/build/app/outputs/flutter-apk/ || echo "APK not found"
     
     - name: Upload debug APK
+      if: success()
       uses: actions/upload-artifact@v4
       with:
         name: app-debug
@@ -52,7 +56,7 @@ jobs:
         retention-days: 30
     
     - name: Upload to GitHub Release
-      if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+      if: success() && github.event_name == 'push' && github.ref == 'refs/heads/main'
       uses: softprops/action-gh-release@v2
       with:
         files: client/build/app/outputs/flutter-apk/app-debug.apk
