@@ -11,7 +11,6 @@ permissions:
 jobs:
   build:
     runs-on: ubuntu-latest
-    
     defaults:
       run:
         working-directory: client
@@ -29,13 +28,6 @@ jobs:
       uses: subosito/flutter-action@v2
       with:
         channel: 'stable'
-    
-    - name: Initialize Flutter Project (Only if needed)
-      run: |
-        # Only initialize if no Android directory exists
-        if [ ! -d "android" ]; then
-          flutter create . --project-name global_broadcast_app
-        fi
     
     - name: Get dependencies
       run: flutter pub get
