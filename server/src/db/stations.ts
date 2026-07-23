@@ -1,16 +1,11 @@
-import type { Env } from '../types';
-import type { Station, ApiResult } from '../types';
+import type { Env, ApiResult, Station } from '../types';
 
-/**
- * Get all radio stations with optional filtering
- */
-export async function getStations(
-  env: Env,
-  params: Record<string, any> = {}
-): Promise<ApiResult> {
+export async function getStations(env: Env, params: Record<string, any> = {}): Promise<ApiResult> {
   try {
+    const limit = parseInt(params.limit || '50');
+    const offset = parseInt(params.offset || '0');
     let query = `SELECT * FROM stations WHERE 1=1`;
-    const placeholders: string[] = [];
+    const placeholders: (string | number)[] = [];
 
     if (params.country) {
       query += ` AND country = ?`;
@@ -30,11 +25,10 @@ export async function getStations(
     }
 
     query += ` ORDER BY name ASC LIMIT ? OFFSET ?`;
-    placeholders.push(parseInt(params.limit || '50'), parseInt(params.offset || '0'));
+    placeholders.push(limit, offset);
 
     const result = await env.DB.prepare(query).bind(...placeholders).all<Station>();
 
-    // If user_id provided, mark favorites
     if (params.user_id && result.results) {
       const favResult = await env.DB.prepare(
         `SELECT station_id FROM user_favorites WHERE user_id = ?`
