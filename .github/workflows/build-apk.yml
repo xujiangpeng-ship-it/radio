@@ -38,20 +38,19 @@ jobs:
       working-directory: client
       run: |
         flutter build apk --debug
-        echo "APK PATH: $(ls client/build/app/outputs/flutter-apk/)"
-        ls -la client/build/app/outputs/flutter-apk/*.apk || echo "No APK found"
+        echo "APK generated at:"
+        ls -la app-release.apk || echo "Error: APK not found!"
+        find . -name "*.apk" -type f
     
     - name: Upload debug APK
-      if: always()
       uses: actions/upload-artifact@v4
       with:
         name: app-debug
-        path: |
-          client/build/app/outputs/flutter-apk/app-debug.apk
+        path: client/build/app/outputs/flutter-apk/app-debug.apk
         retention-days: 30
+        if-no-files-found: error
     
     - name: Create GitHub Release
-      if: always() && github.event_name == 'push' && github.ref == 'refs/heads/main'
       uses: softprops/action-gh-release@v2
       with:
         files: client/build/app/outputs/flutter-apk/app-debug.apk
