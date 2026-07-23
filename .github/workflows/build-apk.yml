@@ -14,7 +14,7 @@ jobs:
     
     defaults:
       run:
-        working-directory: radio/client
+        working-directory: client
     
     steps:
     - uses: actions/checkout@v4
@@ -30,9 +30,12 @@ jobs:
       with:
         channel: 'stable'
     
-    - name: Initialize Flutter Project
+    - name: Initialize Flutter Project (Only if needed)
       run: |
-        flutter create . --project-name global_broadcast_app
+        # Only initialize if no Android directory exists
+        if [ ! -d "android" ]; then
+          flutter create . --project-name global_broadcast_app
+        fi
     
     - name: Get dependencies
       run: flutter pub get
@@ -47,13 +50,13 @@ jobs:
       uses: actions/upload-artifact@v4
       with:
         name: app-debug
-        path: radio/client/build/app/outputs/flutter-apk/app-debug.apk
+        path: client/build/app/outputs/flutter-apk/app-debug.apk
         retention-days: 30
     
     - name: Upload to GitHub Release
       if: github.event_name == 'push' && github.ref == 'refs/heads/main'
       uses: softprops/action-gh-release@v2
       with:
-        files: radio/client/build/app/outputs/flutter-apk/app-debug.apk
+        files: client/build/app/outputs/flutter-apk/app-debug.apk
         tag_name: v${{ github.run_number }}
         generate_release_notes: true
