@@ -28,18 +28,15 @@ jobs:
     
     - name: Initialize Flutter Project
       run: |
-        # Create a temporary directory and initialize properly
-        mkdir -p temp_flutter_client
-        cd temp_flutter_client
+        # Create fresh Flutter project
+        flutter create --project-name global_broadcast_app --platforms android /tmp/fresh_client
         
-        # Initialize fresh Flutter project
-        flutter create --project-name global_broadcast_app --platforms android .
+        # Copy lib files (keep existing pubspec.yaml)
+        cp -r client/lib/* /tmp/fresh_client/lib/
+        cp client/pubspec.yaml /tmp/fresh_client/pubspec.yaml
         
-        # Copy our custom code into it
-        cp -r ../client/lib/* ./lib/
-        cat ../client/pubspec.yaml >> pubspec.yaml
-        
-        # Get dependencies
+        # Verify and get dependencies
+        cd /tmp/fresh_client
         flutter pub get
         
         # Configure Android SDK
@@ -52,13 +49,13 @@ jobs:
       uses: actions/upload-artifact@v4
       with:
         name: app-debug
-        path: temp_flutter_client/build/app/outputs/flutter-apk/app-debug.apk
+        path: /tmp/fresh_client/build/app/outputs/flutter-apk/app-debug.apk
         retention-days: 30
     
     - name: Upload to GitHub Release
       if: github.event_name == 'push' && github.ref == 'refs/heads/main'
       uses: softprops/action-gh-release@v2
       with:
-        files: temp_flutter_client/build/app/outputs/flutter-apk/app-debug.apk
+        files: /tmp/fresh_client/build/app/outputs/flutter-apk/app-debug.apk
         tag_name: v${{ github.run_number }}
         generate_release_notes: true
