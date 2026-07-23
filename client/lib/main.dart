@@ -1,19 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:provider/provider.dart';
-import '../providers/stations_provider.dart';
-import '../services/audio_player_service.dart';
-import '../pages/stations_page.dart';
-import '../pages/favorites_page.dart';
-import '../pages/player_page.dart';
 
 void main() {
   runApp(
     ProviderScope(
-      child: ChangeNotifierProvider<AudioPlayerService>(
-        create: (_) => AudioPlayerService(),
-        child: const GlobalBroadcastApp(),
-      ),
+      child: GlobalBroadcastApp(),
     ),
   );
 }
@@ -29,37 +20,37 @@ class GlobalBroadcastApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue),
         useMaterial3: true,
       ),
-      home: const MainScreen(),
+      home: const HomePage(),
     );
   }
 }
 
-class MainScreen extends StatelessWidget {
-  const MainScreen({super.key});
+class HomePage extends StatelessWidget {
+  const HomePage({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: const StationsPage(),
-      bottomNavigationBar: BottomNavigationBar(
-        currentIndex: 0,
-        onTap: (index) {
-          // TODO: Navigate to different pages
-        },
-        items: const [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.radio),
-            label: '电台',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.favorite),
-            label: '收藏',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.settings),
-            label: '设置',
+      appBar: AppBar(
+        title: const Text('全球广播'),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.settings),
+            onPressed: () {},
           ),
         ],
+      ),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(Icons.radio, size: 100, color: Colors.blue.shade700),
+            SizedBox(height: 24),
+            Text('全球广播电台', style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
+            SizedBox(height: 8),
+            Text('正在加载电台...', style: TextStyle(color: Colors.grey)),
+          ],
+        ),
       ),
     );
   }
