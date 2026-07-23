@@ -1,0 +1,13 @@
+-- Seed initial radio stations data
+
+INSERT OR REPLACE INTO stations (id, name, country, language, url, stream_url, genre, description, logo_url, bit_rate, last_checked_at) VALUES
+('station-1', 'NPR News', 'US', 'English', 'https://npr.mukunalive.com/npr/live/2024/hour2/3058363.mp3', 'https://npr.mukunalive.com/npr/live/2024/hour2/3058363.mp3', 'News', 'National Public Radio news and talk', NULL, 128, CURRENT_TIMESTAMP),
+('station-2', 'BBC World Service', 'UK', 'English', 'https://stream.live.vc.bbcmedia.co.uk/bbc_world_service', 'https://stream.live.vc.bbcmedia.co.uk/bbc_world_service', 'News', 'BBC World Service radio station', NULL, 128, CURRENT_TIMESTAMP),
+('station-3', 'NHK World Japan', 'Japan', 'Japanese', 'https://nhkworld.webcdn.stream.ne.jp/www12/radiojapan/global/all/playlist.m3u8', 'https://nhkworld.webcdn.stream.ne.jp/www12/radiojapan/global/all/playlist.m3u8', 'News', 'NHK World Japanese radio', NULL, 96, CURRENT_TIMESTAMP),
+('station-4', 'France Inter', 'France', 'French', 'https://icecast.radiofrance.fr/franceinter-midfi.mp3', 'https://icecast.radiofrance.fr/franceinter-midfi.mp3', 'Talk', 'French public radio station', NULL, 128, CURRENT_TIMESTAMP),
+('station-5', 'China National Radio', 'China', 'Chinese', 'https://zhibo.himalaya.com/radio/sid/1776', 'https://zhibo.himalaya.com/radio/sid/1776', 'News', '中国之声', NULL, 128, CURRENT_TIMESTAMP),
+('station-6', 'KBS Cool FM', 'South Korea', 'Korean', 'https://dai10.melondl.com/live/kbscool_128.sdp', 'https://dai10.melondl.com/live/kbscool_128.sdp', 'Music', 'KBS Cool FM', NULL, 128, CURRENT_TIMESTAMP),
+('station-7', 'ABC Classic FM', 'Australia', 'English', 'https://live-radio01.mediahublisten.com/1mp/mpeg/playlist.m3u8', 'https://live-radio01.mediahublisten.com/1mp/mpeg/playlist.m3u8', 'Classical', 'Australian Broadcasting Corporation classic music', NULL, 128, CURRENT_TIMESTAMP),
+('station-8', 'Radio Russia', 'Russia', 'Russian', 'https://radioserver.radiosil.com:8200/rutoradio', 'https://radioserver.radiosil.com:8200/rutoradio', 'News', 'Radio Russia international', NULL, 128, CURRENT_TIMESTAMP),
+('station-9', 'All India Radio', 'India', 'Hindi', 'https://air.pc.cdn.bitgravity.com/air/live/pbaudio001/playlist.m3u8', 'https://air.pc.cdn.bitgravity.com/air/live/pbaudio001/playlist.m3u8', 'General', 'All India Radio national service', NULL, 128, CURRENT_TIMESTAMP),
+('station-10', 'Deutsche Welle', 'Germany', 'German', 'https://dwamd.stream.eczadns.de/dw/am/en/gqlivestream_2.m3u', 'https://dwamd.stream.eczadns.de/dw/am/en/gqlivestream_2.m3u', 'News', 'Deutsche Welle German international', NULL, 128, CURRENT_TIMESTAMP);
