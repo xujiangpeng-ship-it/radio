@@ -1,11 +1,13 @@
-import type { Env, ApiResult, Station } from '../types';
+import type { Env } from '../types';
+import type { Station, ApiResult } from '../types';
 
-export async function getStations(env: Env, params: Record<string, any> = {}): Promise<ApiResult> {
+export async function getStations(
+  env: Env,
+  params: Record<string, any> = {}
+): Promise<ApiResult> {
   try {
-    const limit = parseInt(params.limit || '50');
-    const offset = parseInt(params.offset || '0');
     let query = `SELECT * FROM stations WHERE 1=1`;
-    const placeholders: (string | number)[] = [];
+    const placeholders: string[] = [];
 
     if (params.country) {
       query += ` AND country = ?`;
@@ -25,7 +27,7 @@ export async function getStations(env: Env, params: Record<string, any> = {}): P
     }
 
     query += ` ORDER BY name ASC LIMIT ? OFFSET ?`;
-    placeholders.push(limit, offset);
+    placeholders.push(parseInt(params.limit || '50'), parseInt(params.offset || '0'));
 
     const result = await env.DB.prepare(query).bind(...placeholders).all<Station>();
 
