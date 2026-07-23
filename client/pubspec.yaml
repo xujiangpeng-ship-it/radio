@@ -18,7 +18,6 @@ dependencies:
   # Audio Playback
   just_audio: ^0.9.40
   audio_service: ^0.18.15
-  chewie: ^1.8.5
 
   # Network & API
   dio: ^5.7.0
@@ -26,9 +25,6 @@ dependencies:
   # UI Components
   cached_network_image: ^3.4.1
   google_fonts: ^6.2.1
-
-  # Storage
-  shared_preferences: ^2.3.3
 
 dev_dependencies:
   flutter_test:

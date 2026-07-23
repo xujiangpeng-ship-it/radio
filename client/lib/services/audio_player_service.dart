@@ -9,25 +9,18 @@ class AudioPlayerService extends ChangeNotifier {
 
   Station? get currentStation => _currentStation;
   bool get isPlaying => _isPlaying;
-  Duration get position => _audioPlayer.position;
-  Duration get duration => _audioPlayer.duration ?? Duration.zero;
-
-  Stream<Duration> get positionStream => _audioPlayer.positionStream;
 
   Future<void> play(Station station) async {
     try {
       _currentStation = station;
-      
       await _audioPlayer.setUrl(station.streamUrl ?? station.url);
       await _audioPlayer.play();
-      
       _isPlaying = true;
       notifyListeners();
     } catch (e) {
-      print('Failed to play station: $e');
+      print('Failed to play: $e');
       _isPlaying = false;
       notifyListeners();
-      rethrow;
     }
   }
 

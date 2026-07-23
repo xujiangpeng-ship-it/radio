@@ -1,4 +1,3 @@
-import 'dart:convert';
 import 'package:dio/dio.dart';
 import '../models/station.dart';
 
@@ -15,12 +14,16 @@ class ApiService {
     ),
   );
 
-  Future<List<Station>> getStations() async {
+  Future<List<Station>> getStations({int limit = 50, String? country, String? genre}) async {
     try {
-      Response response = await _dio.get('/api/stations?limit=50');
+      var queryParameters = <String, dynamic>{'limit': limit.toString()};
+      if (country != null) queryParameters['country'] = country;
+      if (genre != null) queryParameters['genre'] = genre;
+
+      Response response = await _dio.get('/api/stations', queryParameters: queryParameters);
       
       if (response.statusCode == 200) {
-        final Map<String, dynamic> data = response.data;
+        final data = response.data;
         if (data['success'] == true && data['data'] is List) {
           return (data['data'] as List).map((station) => Station.fromJson(station)).toList();
         }
@@ -31,38 +34,24 @@ class ApiService {
     }
   }
 
-  Future<List<Station>> searchStations(String query) async {
+  Future<Station?> searchStations(String query) async {
     try {
-      Response response = await _dio.get('/api/stations?search=$query&limit=20');
+      Response response = await _dio.get('/api/stations', queryParameters: {'search': query, 'limit': '20'});
       
       if (response.statusCode == 200) {
-        final Map<String, dynamic> data = response.data;
+        final data = response.data;
         if (data['success'] == true && data['data'] is List) {
-          return (data['data'] as List).map((station) => Station.fromJson(station)).toList();
+          return (data['data'] as List).firstOrNull?.let((station) => Station.fromJson(station));
         }
       }
-      return [];
-    } on DioException catch (e) {
+      return null;
+    } catch (e) {
       print('Search failed: $e');
-      return [];
-    }
-  }
-
-  Future<Station?> getStationById(String id) async {
-    try {
-      Response response = await _dio.get('/api/stations/$id');
-      
-      if (response.statusCode == 200) {
-        return Station.fromJson(response.data['data']);
-      }
-      return null;
-    } on DioException catch (e) {
-      print('Get station failed: $e');
       return null;
     }
   }
 
-  void addToFavorites(String userId, String stationId) async {
+  Future<void> addToFavorites(String userId, String stationId) async {
     try {
       await _dio.post('/api/favorites', data: {
         'user_id': userId,
@@ -73,9 +62,9 @@ class ApiService {
     }
   }
 
-  void removeFromFavorites(String userId, String stationId) async {
+  Future<void> removeFromFavorites(String userId, String stationId) async {
     try {
-      await _dio.delete('/api/favorites/$stationId?user_id=$userId');
+      await _dio.delete('/api/favorites/$stationId', queryParameters: {'user_id': userId});
     } catch (e) {
       print('Remove favorite failed: $e');
     }

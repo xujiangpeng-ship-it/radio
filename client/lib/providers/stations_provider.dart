@@ -1,47 +1,23 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../models/station.dart';
-import '../services/api_service.dart';
-
-final apiServiceProvider = Provider<ApiService>((ref) {
-  return ApiService();
-});
 
 final stationsProvider = StateNotifierProvider<StationsNotifier, List<Station>>((ref) {
-  final notifier = StationsNotifier(ref);
-  ref.onDispose(() => notifier.dispose());
-  return notifier;
+  return StationsNotifier(ref);
 });
 
 class StationsNotifier extends StateNotifier<List<Station>> {
-  StationsNotifier(this.ref) : super([]) {
-    loadStations();
-  }
+  StationsNotifier(this.ref) : super([]);
 
   final Ref ref;
-  bool _isLoading = false;
-  String? _error;
 
-  Future<void> loadStations() async {
-    if (_isLoading) return;
-    _isLoading = true;
-    
+  Future<void> load() async {
+    state = [];
     try {
       final apiService = ref.read(apiServiceProvider);
-      state = await apiService.getStations();
-      _error = null;
+      final stations = await apiService.getStations();
+      state = stations;
     } catch (e) {
-      _error = e.toString();
-      print('Failed to load stations: $_error');
-    } finally {
-      _isLoading = false;
+      print('Failed to load stations: $e');
     }
-  }
-
-  void refresh() {
-    loadStations();
-  }
-
-  void dispose() {
-    _isLoading = false;
   }
 }
