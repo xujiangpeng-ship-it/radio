@@ -2,9 +2,8 @@ import { getStations } from './db/stations';
 import type { Env, ApiResult } from '../types';
 
 export default {
-  async fetch(request: Request): Promise<Response> {
+  async fetch(request: Request, env: Env): Promise<Response> {
     const url = new URL(request.url);
-    const env: Env = globalThis as any;
 
     const headers: Record<string, string> = {
       'Content-Type': 'application/json',
