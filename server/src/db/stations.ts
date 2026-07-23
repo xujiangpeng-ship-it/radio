@@ -1,12 +1,9 @@
 import type { Env, ApiResult, Station } from '../types';
 
-export async function getStations(
-  env: Env,
-  params: Record<string, any> = {}
-): Promise<ApiResult> {
+export async function getStations(env: Env, params: Record<string, any> = {}): Promise<ApiResult> {
   try {
     let query = `SELECT * FROM stations WHERE 1=1`;
-    const placeholders: (string | number)[] = [];
+    const placeholders: string[] = [];
 
     if (params.country) {
       query += ` AND country = ?`;
